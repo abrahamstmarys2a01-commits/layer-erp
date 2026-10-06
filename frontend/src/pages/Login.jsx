@@ -63,18 +63,18 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100/90 flex items-center justify-center p-4 selection:bg-[#0F2847] selection:text-white">
+    <div className="min-h-screen bg-slate-100/90 flex items-center justify-center p-3 sm:p-4 selection:bg-[#0F2847] selection:text-white">
       {/* Login Card Container - Perfectly Sized & Centered */}
-      <div className="w-full max-w-[370px] sm:max-w-[380px] bg-white rounded-3xl shadow-xl shadow-slate-300/30 border border-slate-200/80 p-5 sm:p-7 relative z-10 animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-[360px] sm:max-w-[380px] bg-white rounded-3xl shadow-xl shadow-slate-300/30 border border-slate-200/80 p-4 sm:p-6 relative z-10 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Brand Header */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-3 sm:mb-4">
           {/* Golden Law Scales Emblem Logo */}
-          <div className="inline-flex items-center justify-center mb-2">
+          <div className="inline-flex items-center justify-center mb-1.5 sm:mb-2">
             <img
               src={logoImg}
               alt="Layer App Logo"
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain drop-shadow-sm"
+              className="w-13 h-13 sm:w-16 sm:h-16 rounded-full object-contain drop-shadow-sm"
             />
           </div>
 
@@ -88,17 +88,17 @@ export const Login = () => {
 
           {/* Subtitle with gold accent lines */}
           <div className="flex items-center justify-center gap-2 mt-1">
-            <span className="w-7 sm:w-9 h-[1px] bg-[#C69B34]/70"></span>
-            <span className="text-[9.5px] sm:text-[10px] font-semibold tracking-[0.2em] text-[#0F2847] uppercase">
+            <span className="w-6 sm:w-9 h-[1px] bg-[#C69B34]/70"></span>
+            <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.18em] text-[#0F2847] uppercase">
               LAW &bull; DOCUMENTS &bull; JUSTICE
             </span>
-            <span className="w-7 sm:w-9 h-[1px] bg-[#C69B34]/70"></span>
+            <span className="w-6 sm:w-9 h-[1px] bg-[#C69B34]/70"></span>
           </div>
         </div>
 
         {/* Welcome Text */}
-        <div className="mb-4 text-left">
-          <h2 className="text-xl sm:text-[22px] font-extrabold text-[#0F2847] tracking-tight leading-snug">
+        <div className="mb-3.5 sm:mb-4 text-left">
+          <h2 className="text-lg sm:text-[22px] font-extrabold text-[#0F2847] tracking-tight leading-snug">
             Welcome Back!
           </h2>
           <p className="text-xs text-slate-500 mt-0.5 font-normal">
@@ -126,7 +126,7 @@ export const Login = () => {
 
             {/* Input & Label */}
             <div className="flex-1 min-w-0">
-              <label className="block text-[10.5px] font-medium text-slate-500 leading-none mb-0.5">
+              <label className="block text-[10px] sm:text-[10.5px] font-medium text-slate-500 leading-none mb-0.5">
                 Username
               </label>
               <input
@@ -150,7 +150,7 @@ export const Login = () => {
 
             {/* Input & Label */}
             <div className="flex-1 min-w-0">
-              <label className="block text-[10.5px] font-medium text-slate-500 leading-none mb-0.5">
+              <label className="block text-[10px] sm:text-[10.5px] font-medium text-slate-500 leading-none mb-0.5">
                 Password
               </label>
               <input
@@ -168,7 +168,7 @@ export const Login = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="p-1 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none cursor-pointer"
+              className="p-1.5 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none cursor-pointer touch-target"
               title={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -180,7 +180,7 @@ export const Login = () => {
             <button
               type="button"
               onClick={() => setShowHelpModal(true)}
-              className="text-xs text-[#0F2847] font-semibold hover:text-[#0A1D33] border-b border-[#C69B34] pb-0.5 transition-colors cursor-pointer"
+              className="text-xs text-[#0F2847] font-semibold hover:text-[#0A1D33] border-b border-[#C69B34] pb-0.5 transition-colors cursor-pointer touch-target"
             >
               Forgot password?
             </button>
@@ -190,7 +190,7 @@ export const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 sm:py-3 px-4 rounded-xl bg-[#0F2847] hover:bg-[#0A1D33] active:bg-[#071526] text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all disabled:opacity-70 cursor-pointer mt-1"
+            className="w-full py-2.5 sm:py-3 px-4 rounded-xl bg-[#0F2847] hover:bg-[#0A1D33] active:bg-[#071526] text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all disabled:opacity-70 cursor-pointer mt-1 touch-target"
           >
             {loading ? (
               <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -207,7 +207,7 @@ export const Login = () => {
         </form>
 
         {/* OR Separator */}
-        <div className="relative my-3.5 text-center">
+        <div className="relative my-3 sm:my-3.5 text-center">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-slate-200"></div>
           </div>
@@ -219,7 +219,7 @@ export const Login = () => {
         {/* Need Help? Card */}
         <div
           onClick={handleQuickFill}
-          className="bg-[#FDF8F0] hover:bg-[#F7EFE1] active:bg-[#EFE3CF] border border-[#EFE5D8] rounded-xl p-2.5 px-3 flex items-center justify-between cursor-pointer transition-all shadow-2xs group"
+          className="bg-[#FDF8F0] hover:bg-[#F7EFE1] active:bg-[#EFE3CF] border border-[#EFE5D8] rounded-xl p-2.5 px-3 flex items-center justify-between cursor-pointer transition-all shadow-2xs group touch-target"
           title="Click to auto-fill default demo credentials"
         >
           <div className="flex items-center gap-2.5">
@@ -228,7 +228,7 @@ export const Login = () => {
             </div>
             <div className="text-left">
               <h4 className="text-xs font-bold text-[#0F2847] leading-tight">Need help?</h4>
-              <p className="text-[10.5px] text-slate-500">Contact your administrator.</p>
+              <p className="text-[10px] sm:text-[10.5px] text-slate-500">Contact your administrator.</p>
             </div>
           </div>
           <div className="text-slate-400 group-hover:text-[#0F2847] group-hover:translate-x-0.5 transition-all">
@@ -237,11 +237,11 @@ export const Login = () => {
         </div>
 
         {/* Auto-fill Tip */}
-        <div className="mt-2.5 text-center">
+        <div className="mt-2 text-center">
           <button
             type="button"
             onClick={handleQuickFill}
-            className="text-[11px] text-slate-500 hover:text-[#0F2847] transition-colors inline-flex items-center gap-1 font-medium cursor-pointer"
+            className="text-[11px] text-slate-500 hover:text-[#0F2847] transition-colors inline-flex items-center gap-1 font-medium cursor-pointer touch-target"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
             Quick Demo: <strong>admin</strong> / <strong>admin123</strong>

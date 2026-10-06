@@ -58,14 +58,7 @@ export const Dashboard = () => {
 
   const [selectedHearingForWhatsApp, setSelectedHearingForWhatsApp] = useState(null);
 
-  // Junior-wise case data for horizontal bar chart
-  const juniorWiseData = juniors.map((j) => ({
-    name: j.name.replace('Adv. ', ''),
-    cases: j.assignedCases || 0,
-    active: j.activeCases || 0
-  })).sort((a, b) => b.cases - a.cases).slice(0, 5);
-
-  // Upcoming hearings (within next 7-14 days)
+  // Upcoming hearings
   const upcomingHearingsList = hearings
     .filter((h) => h.status === 'Upcoming' || h.status === 'Today')
     .slice(0, 6);
@@ -78,19 +71,20 @@ export const Dashboard = () => {
   const totalRecentAmount = recentAmountsList.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 w-full max-w-full">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-navy-900 tracking-tight">Dashboard</h2>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-navy-900 tracking-tight">Dashboard</h2>
           <p className="text-xs text-slate-500 mt-0.5">Overview of your legal practice</p>
         </div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate('/amounts')}
             icon={IndianRupee}
+            className="flex-1 sm:flex-initial justify-center"
           >
             Record Payment
           </Button>
@@ -99,14 +93,15 @@ export const Dashboard = () => {
             size="sm"
             onClick={() => navigate('/cases')}
             icon={Plus}
+            className="flex-1 sm:flex-initial justify-center"
           >
             New Case
           </Button>
         </div>
       </div>
 
-      {/* Top 6 Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      {/* Top 6 Summary KPI Cards (Responsive Grid: 1 col on mobile -> 2 on sm -> 3 on md/lg -> 6 on xl) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
         <StatCard
           value={stats.totalJuniors ?? 0}
           label="Total Juniors"
@@ -151,10 +146,10 @@ export const Dashboard = () => {
         />
       </div>
 
-      {/* Chart Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* Chart Section (Stacks on mobile/tablet, 2-col on desktop) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Chart 1: Cases Overview (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-xl p-5 border border-slate-200/80 shadow-card">
+        <div className="lg:col-span-7 bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-card">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-navy-900">Cases Overview</h3>
@@ -165,7 +160,7 @@ export const Dashboard = () => {
             </span>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={caseOverviewData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -184,7 +179,7 @@ export const Dashboard = () => {
         </div>
 
         {/* Chart 2: Amount Collection (5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-xl p-5 border border-slate-200/80 shadow-card">
+        <div className="lg:col-span-5 bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-card">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-navy-900">Amount Collection</h3>
@@ -195,7 +190,7 @@ export const Dashboard = () => {
             </span>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={amountCollectionData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <defs>
@@ -230,9 +225,9 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* Row 2: Upcoming Hearings (Full Width Clean Table) */}
-      <div className="bg-white rounded-xl p-5 border border-slate-200/80 shadow-card">
-        <div className="flex items-center justify-between mb-4">
+      {/* Row 2: Upcoming Hearings Table */}
+      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-card">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4">
           <div>
             <h3 className="text-sm font-bold text-navy-900">Upcoming Hearings</h3>
             <p className="text-[11px] text-slate-500">High Court & District court listed appearance calendar</p>
@@ -241,13 +236,15 @@ export const Dashboard = () => {
             variant="outline"
             size="sm"
             onClick={() => navigate('/hearings')}
+            className="self-start sm:self-auto"
           >
             View All Hearings
           </Button>
         </div>
 
-        <div className="overflow-x-auto -mx-5 px-5">
-          <table className="w-full text-left text-xs">
+        {/* Responsive Table with Touch Horizontal Scroll */}
+        <div className="table-responsive -mx-4 sm:-mx-5 px-4 sm:px-5">
+          <table className="w-full text-left text-xs min-w-[620px]">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-y border-slate-100 uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="py-2.5 px-3">Case ID</th>
@@ -275,7 +272,7 @@ export const Dashboard = () => {
                   <td className="py-3 px-3 text-right">
                     <button
                       onClick={() => setSelectedHearingForWhatsApp(h)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-[11px] font-semibold transition-colors border border-emerald-200"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-[11px] font-semibold transition-colors border border-emerald-200 cursor-pointer touch-target"
                       title="Send WhatsApp Reminder"
                     >
                       <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
@@ -297,9 +294,9 @@ export const Dashboard = () => {
       </div>
 
       {/* Row 3: Recent Cases & Recent Amount Entries */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Recent Cases (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-xl p-5 border border-slate-200/80 shadow-card">
+        <div className="lg:col-span-7 bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-card">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-navy-900">Recent Cases</h3>
@@ -307,14 +304,14 @@ export const Dashboard = () => {
             </div>
             <button
               onClick={() => navigate('/cases')}
-              className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
             >
               All Cases <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="overflow-x-auto -mx-5 px-5">
-            <table className="w-full text-left text-xs">
+          <div className="table-responsive -mx-4 sm:-mx-5 px-4 sm:px-5">
+            <table className="w-full text-left text-xs min-w-[560px]">
               <thead className="bg-slate-50 text-slate-500 font-semibold border-y border-slate-100 uppercase tracking-wider text-[10px]">
                 <tr>
                   <th className="py-2.5 px-3">Case ID</th>
@@ -344,7 +341,7 @@ export const Dashboard = () => {
                     <td className="py-3 px-3 text-right">
                       <button
                         onClick={() => navigate(`/cases/${c.id}`)}
-                        className="p-1 rounded-md text-slate-500 hover:text-navy-900 hover:bg-slate-100"
+                        className="p-1.5 rounded-lg text-slate-500 hover:text-navy-900 hover:bg-slate-100 cursor-pointer touch-target inline-flex items-center justify-center"
                         title="View Case Details"
                       >
                         <Eye className="w-4 h-4" />
@@ -352,79 +349,65 @@ export const Dashboard = () => {
                     </td>
                   </tr>
                 ))}
-                {recentCasesList.length === 0 && (
-                  <tr>
-                    <td colSpan="8" className="py-8 text-center text-slate-400">
-                      No cases recorded yet. Click &quot;New Case&quot; above to create your first case.
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>
         </div>
 
         {/* Recent Amount Entries (5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-xl p-5 border border-slate-200/80 shadow-card">
+        <div className="lg:col-span-5 bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-card">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-navy-900">Recent Amount Entries</h3>
-              <p className="text-[11px] text-slate-500">
-                Total in batch: <span className="font-bold text-emerald-700">{formatINR(totalRecentAmount)}</span>
-              </p>
+              <h3 className="text-sm font-bold text-navy-900">Recent Collections</h3>
+              <p className="text-[11px] text-slate-500">Latest fee retainers & receipts</p>
             </div>
             <button
               onClick={() => navigate('/amounts')}
-              className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
             >
               All Receipts <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="overflow-x-auto -mx-5 px-5">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold border-y border-slate-100 uppercase tracking-wider text-[10px]">
-                <tr>
-                  <th className="py-2.5 px-3">Case ID</th>
-                  <th className="py-2.5 px-3">Client</th>
-                  <th className="py-2.5 px-3">Amount</th>
-                  <th className="py-2.5 px-3">Date</th>
-                  <th className="py-2.5 px-3">Mode</th>
-                  <th className="py-2.5 px-3">Added By</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {recentAmountsList.map((a) => (
-                  <tr key={a.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3 px-3 font-bold text-navy-900">{a.caseId}</td>
-                    <td className="py-3 px-3 font-medium text-slate-800 truncate max-w-[100px]">{a.clientName}</td>
-                    <td className="py-3 px-3 font-extrabold text-emerald-700">{formatINR(a.amount)}</td>
-                    <td className="py-3 px-3 text-slate-500">{formatDate(a.paymentDate)}</td>
-                    <td className="py-3 px-3">
-                      <Badge status={a.paymentMode}>{a.paymentMode}</Badge>
-                    </td>
-                    <td className="py-3 px-3 text-slate-500 text-[11px] truncate max-w-[90px]">{a.addedBy}</td>
-                  </tr>
-                ))}
-                {recentAmountsList.length === 0 && (
-                  <tr>
-                    <td colSpan="6" className="py-8 text-center text-slate-400">
-                      No payment receipts recorded yet.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="space-y-2.5">
+            {recentAmountsList.map((amt) => (
+              <div
+                key={amt.id}
+                className="p-3 bg-slate-50/70 hover:bg-slate-100/70 rounded-xl border border-slate-100 transition-colors flex items-center justify-between"
+              >
+                <div className="min-w-0 pr-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-xs text-navy-900">{amt.caseId}</span>
+                    <Badge status={amt.paymentMode}>{amt.paymentMode}</Badge>
+                  </div>
+                  <p className="text-xs text-slate-700 font-medium truncate mt-0.5">{amt.clientName}</p>
+                  <p className="text-[10px] text-slate-400">{formatDate(amt.paymentDate)}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <span className="text-sm font-black text-emerald-600 block">
+                    {formatINR(amt.amount)}
+                  </span>
+                  <span className="text-[10px] text-slate-400 font-mono">{amt.receiptNo}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500">Recent Total</span>
+            <span className="text-sm font-extrabold text-navy-900">{formatINR(totalRecentAmount)}</span>
           </div>
         </div>
       </div>
 
-      {/* WhatsApp Modal */}
-      <WhatsAppModal
-        isOpen={!!selectedHearingForWhatsApp}
-        onClose={() => setSelectedHearingForWhatsApp(null)}
-        hearing={selectedHearingForWhatsApp}
-      />
+      {/* WhatsApp Modal for Direct Notification */}
+      {selectedHearingForWhatsApp && (
+        <WhatsAppModal
+          hearing={selectedHearingForWhatsApp}
+          isOpen={!!selectedHearingForWhatsApp}
+          onClose={() => setSelectedHearingForWhatsApp(null)}
+        />
+      )}
     </div>
   );
 };

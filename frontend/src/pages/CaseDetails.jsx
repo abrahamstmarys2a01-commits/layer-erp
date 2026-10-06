@@ -119,81 +119,81 @@ export const CaseDetails = () => {
   return (
     <div className="space-y-6">
       {/* Top Navigation & Actions Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3">
           <button
             onClick={() => navigate('/cases')}
-            className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-navy-900 hover:bg-slate-50 transition-colors shadow-xs"
+            className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-navy-900 hover:bg-slate-50 transition-colors shadow-xs touch-target shrink-0 mt-0.5 sm:mt-0"
             title="Back to Cases"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <div className="flex items-center gap-2.5">
-              <h2 className="text-2xl font-black text-navy-900 tracking-tight">{currentCase.id}</h2>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-black text-navy-900 tracking-tight">{currentCase.id}</h2>
               <Badge status={currentCase.caseStatus}>{currentCase.caseStatus}</Badge>
               <Badge status={currentCase.caseType}>{currentCase.caseType}</Badge>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 mt-1 break-words">
               Client: <span className="font-bold text-slate-800">{currentCase.clientName}</span> | Filing No:{' '}
               <span className="font-medium text-slate-700">{currentCase.caseNumber || 'WP/Pending/2026'}</span>
             </p>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
-          <Button variant="outline" size="sm" icon={User} onClick={() => setIsClientHistoryModalOpen(true)}>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" icon={User} className="w-full sm:w-auto" onClick={() => setIsClientHistoryModalOpen(true)}>
             Client 360° History
           </Button>
-          <Button variant="outline" size="sm" icon={Edit2} onClick={() => setIsEditCaseOpen(true)}>
+          <Button variant="outline" size="sm" icon={Edit2} className="flex-1 sm:flex-none" onClick={() => setIsEditCaseOpen(true)}>
             Edit Case
           </Button>
-          <Button variant="outline" size="sm" icon={Upload} onClick={() => setIsUploadDocOpen(true)}>
+          <Button variant="outline" size="sm" icon={Upload} className="flex-1 sm:flex-none" onClick={() => setIsUploadDocOpen(true)}>
             Upload Doc
           </Button>
-          <Button variant="outline" size="sm" icon={Calendar} onClick={() => setIsHearingModalOpen(true)}>
-            Schedule Hearing
+          <Button variant="outline" size="sm" icon={Calendar} className="flex-1 sm:flex-none" onClick={() => setIsHearingModalOpen(true)}>
+            Schedule
           </Button>
-          <Button variant="primary" size="sm" icon={IndianRupee} onClick={() => setIsAmountModalOpen(true)}>
+          <Button variant="primary" size="sm" icon={IndianRupee} className="w-full sm:w-auto" onClick={() => setIsAmountModalOpen(true)}>
             Record Payment
           </Button>
         </div>
       </div>
 
       {/* Summary Stat Cards Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200/80 shadow-xs">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Case Status</span>
-          <span className="text-base font-bold text-navy-900 mt-1 block">{currentCase.caseStatus}</span>
+          <span className="text-sm sm:text-base font-bold text-navy-900 mt-1 block truncate">{currentCase.caseStatus}</span>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200/80 shadow-xs">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Assigned Junior</span>
-          <span className="text-xs font-bold text-blue-700 mt-1 block truncate">
+          <span className="text-xs sm:text-xs font-bold text-blue-700 mt-1 block truncate">
             {currentCase.assignedJunior || 'Unassigned'}
           </span>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200/80 shadow-xs">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Next Hearing</span>
-          <span className="text-xs font-bold text-slate-800 mt-1 block">
+          <span className="text-xs font-bold text-slate-800 mt-1 block truncate">
             {formatDate(currentCase.nextHearingDate)}
           </span>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200/80 shadow-xs">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Agreed Fee</span>
-          <span className="text-sm font-bold text-navy-900 mt-1 block">{formatINR(totalFee)}</span>
+          <span className="text-xs sm:text-sm font-bold text-navy-900 mt-1 block">{formatINR(totalFee)}</span>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200/80 shadow-xs">
           <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block">Amount Paid</span>
-          <span className="text-sm font-black text-emerald-700 mt-1 block">{formatINR(totalPaid)}</span>
+          <span className="text-xs sm:text-sm font-black text-emerald-700 mt-1 block">{formatINR(totalPaid)}</span>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200/80 shadow-xs">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Balance Due</span>
-          <span className={`text-sm font-black mt-1 block ${balance > 0 ? 'text-amber-700' : 'text-slate-400'}`}>
+          <span className={`text-xs sm:text-sm font-black mt-1 block ${balance > 0 ? 'text-amber-700' : 'text-slate-400'}`}>
             {formatINR(balance)}
           </span>
         </div>
@@ -201,10 +201,10 @@ export const CaseDetails = () => {
 
       {/* Tabs Navigation */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-card overflow-hidden">
-        <div className="flex items-center border-b border-slate-200 bg-slate-50/50 px-4 overflow-x-auto">
+        <div className="flex items-center border-b border-slate-200 bg-slate-50/50 px-2 sm:px-4 overflow-x-auto no-scrollbar scroll-smooth">
           {[
             { id: 'overview', label: 'Overview & Brief' },
-            { id: 'clientHistory', label: `Client 360° History (${clientCases.length} Cases)` },
+            { id: 'clientHistory', label: `Client 360° (${clientCases.length})` },
             { id: 'documents', label: `Documents (${caseDocuments.length})` },
             { id: 'hearings', label: `Hearings (${caseHearings.length})` },
             { id: 'payments', label: `Payments (${casePayments.length})` },
@@ -213,7 +213,7 @@ export const CaseDetails = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-3.5 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+              className={`px-3.5 sm:px-5 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap touch-target ${
                 activeTab === tab.id
                   ? 'border-navy-900 text-navy-900 bg-white shadow-xs'
                   : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -225,18 +225,18 @@ export const CaseDetails = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="p-6">
+        <div className="p-3.5 sm:p-6">
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {/* Client & Contact Information */}
-                <div className="bg-slate-50/60 rounded-xl p-5 border border-slate-200/80 space-y-4">
+                <div className="bg-slate-50/60 rounded-xl p-4 sm:p-5 border border-slate-200/80 space-y-4">
                   <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider flex items-center gap-2">
                     <User className="w-4 h-4 text-blue-600" />
                     Client Profile
                   </h4>
-                  <div className="grid grid-cols-2 gap-4 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs">
                     <div>
                       <span className="text-slate-400 block font-medium">Client Full Name</span>
                       <span className="font-bold text-slate-800 text-sm">{currentCase.clientName}</span>
@@ -384,8 +384,8 @@ export const CaseDetails = () => {
                   </h4>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
+                <div className="table-responsive">
+                  <table className="w-full text-left text-xs min-w-[720px]">
                     <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 text-[10px] uppercase">
                       <tr>
                         <th className="py-3 px-4">Case ID</th>
@@ -466,8 +466,8 @@ export const CaseDetails = () => {
                 {clientPayments.length === 0 ? (
                   <div className="p-6 text-center text-xs text-slate-400">No payment receipts found for this client.</div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
+                  <div className="table-responsive">
+                    <table className="w-full text-left text-xs min-w-[650px]">
                       <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 text-[10px] uppercase">
                         <tr>
                           <th className="py-3 px-4">Receipt</th>

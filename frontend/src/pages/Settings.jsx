@@ -169,39 +169,41 @@ export const Settings = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Settings Sidebar Navigation */}
-        <div className="lg:col-span-3 bg-white rounded-xl border border-slate-200/80 shadow-card p-2 space-y-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeSection === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all text-left ${
-                  isActive
-                    ? 'bg-navy-900 text-white shadow-xs'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-navy-900'
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        {/* Left Settings Sidebar Navigation / Mobile Tab Bar */}
+        <div className="lg:col-span-3 bg-white rounded-xl border border-slate-200/80 shadow-card p-2">
+          <div className="flex lg:flex-col gap-1 overflow-x-auto no-scrollbar py-1 lg:py-0">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap text-left touch-target shrink-0 lg:shrink lg:w-full ${
+                    isActive
+                      ? 'bg-navy-900 text-white shadow-xs'
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-navy-900'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
-          <div className="pt-2 mt-2 border-t border-slate-100">
+          <div className="hidden lg:block pt-2 mt-2 border-t border-slate-100 space-y-1">
             <button
               onClick={() => resetToMockData()}
-              className="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-navy-900 transition-colors text-left"
+              className="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-navy-900 transition-colors text-left touch-target"
             >
               <RotateCcw className="w-4 h-4 text-slate-400" />
               Reset Sample Data
             </button>
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors text-left"
+              className="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors text-left touch-target"
             >
               <LogOut className="w-4 h-4 text-red-500" />
               Sign Out
@@ -213,7 +215,7 @@ export const Settings = () => {
         <div className="lg:col-span-9 space-y-6">
           {/* SECTION 1: PROFILE */}
           {activeSection === 'profile' && (
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-card p-6 space-y-6">
+            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-card p-4 sm:p-6 space-y-6">
               <div className="border-b border-slate-100 pb-4 flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-black text-navy-900">Admin Profile & Chamber Details</h3>
@@ -222,10 +224,10 @@ export const Settings = () => {
               </div>
 
               {/* Admin Profile Card Live Preview */}
-              <div className="bg-gradient-to-br from-navy-950 via-navy-900 to-slate-900 text-white rounded-2xl p-6 shadow-md border border-navy-800">
+              <div className="bg-gradient-to-br from-navy-950 via-navy-900 to-slate-900 text-white rounded-2xl p-4 sm:p-6 shadow-md border border-navy-800">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-                  <div className="flex items-center gap-4">
-                    <div className="relative group w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-white/20 shadow-inner bg-slate-800 shrink-0">
+                  <div className="flex items-center gap-3.5 sm:gap-4">
+                    <div className="relative group w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden ring-2 ring-white/20 shadow-inner bg-slate-800 shrink-0">
                       <img
                         src={profileData.profileImage || 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=200&auto=format&fit=crop&q=80'}
                         alt="Profile"

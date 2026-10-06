@@ -187,8 +187,8 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
               No registered cases found for this client.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="table-responsive">
+              <table className="w-full text-left text-xs min-w-[720px]">
                 <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="py-3 px-4">Case ID & Filing</th>
@@ -209,7 +209,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                     const cBal = Math.max(0, cFee - cPaid);
                     return (
                       <tr key={c.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="py-3.5 px-4">
+                        <td className="py-3.5 px-4 whitespace-nowrap">
                           <span className="font-extrabold text-navy-900 block">{c.id}</span>
                           <span className="text-[11px] text-slate-400 font-medium">{c.caseNumber || 'Filing Pending'}</span>
                         </td>
@@ -220,9 +220,9 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                           </span>
                         </td>
                         <td className="py-3.5 px-4 text-slate-600 font-medium">{c.assignedJunior || 'Senior Counsel'}</td>
-                        <td className="py-3.5 px-4 text-right font-bold text-slate-800">{formatINR(cFee)}</td>
-                        <td className="py-3.5 px-4 text-right font-bold text-emerald-700">{formatINR(cPaid)}</td>
-                        <td className="py-3.5 px-4 text-right font-bold text-amber-700">
+                        <td className="py-3.5 px-4 text-right font-bold text-slate-800 whitespace-nowrap">{formatINR(cFee)}</td>
+                        <td className="py-3.5 px-4 text-right font-bold text-emerald-700 whitespace-nowrap">{formatINR(cPaid)}</td>
+                        <td className="py-3.5 px-4 text-right font-bold text-amber-700 whitespace-nowrap">
                           {cBal > 0 ? formatINR(cBal) : <span className="text-slate-400 font-normal">Nil</span>}
                         </td>
                         <td className="py-3.5 px-4">
@@ -234,7 +234,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                               onClose();
                               navigate(`/cases/${c.id}`);
                             }}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer touch-target"
                           >
                             <span>Open</span>
                             <ExternalLink className="w-3 h-3" />
@@ -251,7 +251,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
 
         {/* Section 2: Lifetime Payment Ledger */}
         <div className="bg-white rounded-2xl border border-slate-200/90 shadow-card overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="px-4 sm:px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h4 className="text-sm font-extrabold text-navy-900 tracking-tight flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-emerald-600" />
@@ -259,7 +259,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
               </h4>
               <p className="text-xs text-slate-500 mt-0.5">Complete chronological ledger of retainer receipts received from this client</p>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <span className="text-xs text-slate-400 block font-medium">Total Received:</span>
               <span className="text-base font-black text-emerald-700">{formatINR(clientData.totalPaid)}</span>
             </div>
@@ -270,8 +270,8 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
               No payment transactions recorded for this client yet.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="table-responsive">
+              <table className="w-full text-left text-xs min-w-[700px]">
                 <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="py-3 px-4">Receipt ID</th>
@@ -286,8 +286,8 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                 <tbody className="divide-y divide-slate-100">
                   {clientData.payments.map((p) => (
                     <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="py-3.5 px-4 font-bold text-navy-900">{p.id}</td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 font-bold text-navy-900 whitespace-nowrap">{p.id}</td>
+                      <td className="py-3.5 px-4 whitespace-nowrap">
                         <button
                           onClick={() => {
                             onClose();
@@ -298,7 +298,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                           {p.caseId}
                         </button>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600">{formatDate(p.paymentDate || p.date)}</td>
+                      <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">{formatDate(p.paymentDate || p.date)}</td>
                       <td className="py-3.5 px-4">
                         <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded font-semibold text-[11px]">
                           {p.paymentMethod || 'UPI / Bank'}
@@ -306,7 +306,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                       </td>
                       <td className="py-3.5 px-4 text-slate-500 font-mono text-[11px]">{p.referenceNo || p.notes || '-'}</td>
                       <td className="py-3.5 px-4 text-slate-600">{p.receivedBy || 'Admin'}</td>
-                      <td className="py-3.5 px-4 text-right font-black text-emerald-700 text-sm">
+                      <td className="py-3.5 px-4 text-right font-black text-emerald-700 text-sm whitespace-nowrap">
                         {formatINR(p.amount)}
                       </td>
                     </tr>
@@ -319,7 +319,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
 
         {/* Section 3: Hearing Timeline for Client */}
         <div className="bg-white rounded-2xl border border-slate-200/90 shadow-card overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="px-4 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between">
             <h4 className="text-sm font-extrabold text-navy-900 tracking-tight flex items-center gap-2">
               <Calendar className="w-4 h-4 text-indigo-600" />
               Court Listings & Hearing Schedule ({clientData.hearings.length} Hearings)
@@ -339,7 +339,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                       <Calendar className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="font-bold text-navy-900 text-xs">{h.caseId} – {h.court}</span>
                         <Badge status={h.status}>{h.status}</Badge>
                       </div>
@@ -350,13 +350,13 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
                     <button
                       onClick={() => {
                         onClose();
                         navigate(`/cases/${h.caseId}`);
                       }}
-                      className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-navy-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+                      className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-navy-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer touch-target"
                     >
                       View Case
                     </button>
@@ -369,7 +369,7 @@ export const ClientHistoryModal = ({ isOpen, onClose, clientName, clientMobile }
 
         {/* Modal Footer */}
         <div className="flex justify-end pt-2">
-          <Button variant="primary" onClick={onClose}>
+          <Button variant="primary" onClick={onClose} className="w-full sm:w-auto">
             Close Client History
           </Button>
         </div>

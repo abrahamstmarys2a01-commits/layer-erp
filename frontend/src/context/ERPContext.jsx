@@ -7,14 +7,27 @@ import { initialSettings } from '../data/mockSettings';
 import { generateId } from '../utils/formatters';
 import { api } from '../services/api';
 
+// Helper to deduplicate records by ID / unique identifier
+export const deduplicateList = (list) => {
+  if (!Array.isArray(list)) return [];
+  const seen = new Set();
+  return list.filter((item) => {
+    if (!item) return false;
+    const key = item.id || item._id || JSON.stringify(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
 const ERPContext = createContext(null);
 
 export const ERPProvider = ({ children }) => {
-  // Load initial state
+  // Load initial state with deduplication
   const [juniors, setJuniors] = useState(() => {
     try {
       const saved = localStorage.getItem('layer_erp_juniors');
-      return saved ? JSON.parse(saved) : initialJuniors;
+      return saved ? deduplicateList(JSON.parse(saved)) : initialJuniors;
     } catch {
       return initialJuniors;
     }
@@ -23,7 +36,7 @@ export const ERPProvider = ({ children }) => {
   const [cases, setCases] = useState(() => {
     try {
       const saved = localStorage.getItem('layer_erp_cases');
-      return saved ? JSON.parse(saved) : initialCases;
+      return saved ? deduplicateList(JSON.parse(saved)) : initialCases;
     } catch {
       return initialCases;
     }
@@ -32,7 +45,7 @@ export const ERPProvider = ({ children }) => {
   const [amounts, setAmounts] = useState(() => {
     try {
       const saved = localStorage.getItem('layer_erp_amounts');
-      return saved ? JSON.parse(saved) : initialAmounts;
+      return saved ? deduplicateList(JSON.parse(saved)) : initialAmounts;
     } catch {
       return initialAmounts;
     }
@@ -41,7 +54,7 @@ export const ERPProvider = ({ children }) => {
   const [hearings, setHearings] = useState(() => {
     try {
       const saved = localStorage.getItem('layer_erp_hearings');
-      return saved ? JSON.parse(saved) : initialHearings;
+      return saved ? deduplicateList(JSON.parse(saved)) : initialHearings;
     } catch {
       return initialHearings;
     }
@@ -59,7 +72,7 @@ export const ERPProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
   const [isBackendConnected, setIsBackendConnected] = useState(false);
 
-  // Sync data from backend API on initial mount
+  // Sync data from backend API on initial mount with automatic deduplication
   useEffect(() => {
     const fetchBackendData = async () => {
       try {
@@ -71,18 +84,18 @@ export const ERPProvider = ({ children }) => {
           api.getSettings(),
         ]);
 
-        if (jRes.status === 'fulfilled' && jRes.value?.data) {
-          setJuniors(jRes.value.data);
+        if (jRes.status === 'fulfilled' && jRes.value?.data && Array.isArray(jRes.value.data)) {
+          setJuniors(deduplicateList(jRes.value.data));
           setIsBackendConnected(true);
         }
-        if (cRes.status === 'fulfilled' && cRes.value?.data) {
-          setCases(cRes.value.data);
+        if (cRes.status === 'fulfilled' && cRes.value?.data && Array.isArray(cRes.value.data)) {
+          setCases(deduplicateList(cRes.value.data));
         }
-        if (aRes.status === 'fulfilled' && aRes.value?.data) {
-          setAmounts(aRes.value.data);
+        if (aRes.status === 'fulfilled' && aRes.value?.data && Array.isArray(aRes.value.data)) {
+          setAmounts(deduplicateList(aRes.value.data));
         }
-        if (hRes.status === 'fulfilled' && hRes.value?.data) {
-          setHearings(hRes.value.data);
+        if (hRes.status === 'fulfilled' && hRes.value?.data && Array.isArray(hRes.value.data)) {
+          setHearings(deduplicateList(hRes.value.data));
         }
         if (sRes.status === 'fulfilled' && sRes.value?.data) {
           setSettings(sRes.value.data);

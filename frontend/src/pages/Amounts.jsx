@@ -142,9 +142,9 @@ export const Amounts = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-card flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
+      <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/80 shadow-card flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
           <input
             type="text"
             placeholder="Search Case ID, client name, receipt number..."
@@ -157,16 +157,16 @@ export const Amounts = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2.5 w-full md:w-auto">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
           <select
             value={modeFilter}
             onChange={(e) => {
               setModeFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full md:w-44 bg-slate-50 focus:bg-white text-xs text-slate-800 px-3 py-2.5 rounded-lg border border-slate-200 focus:border-navy-600 focus:outline-none cursor-pointer"
+            className="flex-1 sm:w-40 bg-slate-50 focus:bg-white text-xs text-slate-800 px-3 py-2.5 rounded-lg border border-slate-200 focus:border-navy-600 focus:outline-none cursor-pointer"
           >
-            <option value="">All Payment Modes</option>
+            <option value="">All Modes</option>
             <option value="UPI">UPI</option>
             <option value="Bank Transfer">Bank Transfer</option>
             <option value="Cash">Cash</option>
@@ -180,7 +180,7 @@ export const Amounts = () => {
               setDateFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full md:w-40 bg-slate-50 focus:bg-white text-xs text-slate-800 px-3 py-2.5 rounded-lg border border-slate-200 focus:border-navy-600 focus:outline-none cursor-pointer"
+            className="flex-1 sm:w-36 bg-slate-50 focus:bg-white text-xs text-slate-800 px-3 py-2 rounded-lg border border-slate-200 focus:border-navy-600 focus:outline-none cursor-pointer"
           />
 
           {(searchTerm || modeFilter || dateFilter) && (
@@ -203,8 +203,8 @@ export const Amounts = () => {
           />
         ) : (
           <>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="table-responsive">
+              <table className="w-full text-left text-xs min-w-[700px]">
                 <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200/80 uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="py-3 px-4">Case ID</th>
@@ -220,33 +220,33 @@ export const Amounts = () => {
                 <tbody className="divide-y divide-slate-100">
                   {paginatedAmounts.map((a) => (
                     <tr key={a.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-4 font-bold text-navy-900">{a.caseId}</td>
+                      <td className="py-3.5 px-4 font-bold text-navy-900 whitespace-nowrap">{a.caseId}</td>
                       <td className="py-3.5 px-4 font-semibold text-slate-800">{a.clientName}</td>
-                      <td className="py-3.5 px-4 font-extrabold text-emerald-700 text-sm">
+                      <td className="py-3.5 px-4 font-extrabold text-emerald-700 text-sm whitespace-nowrap">
                         {formatINR(a.amount)}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600 font-medium">{formatDate(a.paymentDate)}</td>
+                      <td className="py-3.5 px-4 text-slate-600 font-medium whitespace-nowrap">{formatDate(a.paymentDate)}</td>
                       <td className="py-3.5 px-4">
                         <Badge status={a.paymentMode}>{a.paymentMode}</Badge>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600 truncate max-w-[200px]" title={a.description}>
+                      <td className="py-3.5 px-4 text-slate-600 truncate max-w-[180px]" title={a.description}>
                         {a.description || '-'}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-500 text-[11px] truncate max-w-[120px]">
+                      <td className="py-3.5 px-4 text-slate-500 text-[11px] truncate max-w-[100px]">
                         {a.addedBy || 'Admin'}
                       </td>
                       <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => handleEdit(a)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-slate-100 transition-colors"
+                            className="p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-slate-100 transition-colors touch-target"
                             title="Edit Entry"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => setAmountToDelete(a)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-red-50 transition-colors"
+                            className="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-red-50 transition-colors touch-target"
                             title="Delete Entry"
                           >
                             <Trash2 className="w-4 h-4" />

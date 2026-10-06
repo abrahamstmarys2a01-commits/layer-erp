@@ -37,12 +37,12 @@ export const Modal = ({
   if (!isOpen) return null;
 
   const sizeClasses = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
-    full: 'max-w-6xl w-full',
-    fullscreen: 'w-full max-w-6xl'
+    sm: 'sm:max-w-md',
+    md: 'sm:max-w-lg',
+    lg: 'sm:max-w-2xl',
+    xl: 'sm:max-w-4xl',
+    full: 'sm:max-w-6xl',
+    fullscreen: 'max-w-none'
   };
 
   return (
@@ -51,32 +51,33 @@ export const Modal = ({
       <div
         className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity duration-200"
         onClick={onClose}
+        aria-hidden="true"
       />
 
-      {/* Modal Dialog */}
+      {/* Modal Dialog Box */}
       <div
-        className={`relative bg-white shadow-2xl border border-slate-200/80 flex flex-col transform transition-all z-10 ${
+        className={`relative bg-white shadow-2xl border border-slate-200/80 flex flex-col transform transition-all z-10 w-[calc(100vw-24px)] ${
           isFullscreen
             ? 'w-screen h-screen rounded-none my-0 max-w-none'
-            : `w-full ${sizeClasses[size] || 'max-w-lg'} rounded-2xl my-4 sm:my-8 max-h-[92vh]`
+            : `${sizeClasses[size] || 'sm:max-w-lg'} rounded-2xl sm:rounded-3xl my-auto max-h-[90vh]`
         }`}
         role="dialog"
         aria-modal="true"
       >
         {/* Header */}
         {(title || showClose) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80 shrink-0">
-            <div>
-              {title && <h3 className="text-base sm:text-lg font-bold text-navy-900 tracking-tight">{title}</h3>}
-              {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 bg-slate-50/80 rounded-t-2xl sm:rounded-t-3xl shrink-0">
+            <div className="min-w-0 mr-2">
+              {title && <h3 className="text-sm sm:text-base font-bold text-navy-900 tracking-tight truncate">{title}</h3>}
+              {subtitle && <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate">{subtitle}</p>}
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 shrink-0">
               {allowFullscreenToggle && (
                 <button
                   type="button"
                   onClick={() => setIsFullscreen(!isFullscreen)}
-                  className="text-slate-400 hover:text-navy-900 p-1.5 rounded-lg hover:bg-slate-200/60 transition-colors focus:outline-none"
+                  className="hidden sm:flex text-slate-400 hover:text-navy-900 p-1.5 rounded-lg hover:bg-slate-200/60 transition-colors focus:outline-none"
                   title={isFullscreen ? "Exit Fullscreen" : "Full Screen"}
                 >
                   {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -87,7 +88,7 @@ export const Modal = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition-colors focus:outline-none ml-0.5"
+                  className="text-slate-400 hover:text-rose-600 p-2 rounded-xl hover:bg-rose-50 transition-colors focus:outline-none touch-target flex items-center justify-center cursor-pointer"
                   title="Close (ESC)"
                 >
                   <X className="w-5 h-5" />
@@ -97,8 +98,8 @@ export const Modal = ({
           </div>
         )}
 
-        {/* Content */}
-        <div className="p-6 sm:p-8 overflow-y-auto flex-1">{children}</div>
+        {/* Modal Scrollable Body */}
+        <div className="p-4 sm:p-6 sm:p-8 overflow-y-auto flex-1">{children}</div>
       </div>
     </div>
   );

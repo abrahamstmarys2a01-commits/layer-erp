@@ -81,7 +81,7 @@ export const AddEditJuniorModal = ({ isOpen, onClose, juniorToEdit }) => {
     >
       <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-6 pb-6">
         {/* Section 1: Personal & Contact Information */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
             <User className="w-4 h-4 text-blue-600" />
             <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -89,7 +89,7 @@ export const AddEditJuniorModal = ({ isOpen, onClose, juniorToEdit }) => {
             </h4>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Input
               label="Junior Advocate Full Name"
               required
@@ -121,7 +121,7 @@ export const AddEditJuniorModal = ({ isOpen, onClose, juniorToEdit }) => {
         </div>
 
         {/* Section 2: Bar Council & Specialization */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
             <Award className="w-4 h-4 text-amber-600" />
             <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -129,7 +129,7 @@ export const AddEditJuniorModal = ({ isOpen, onClose, juniorToEdit }) => {
             </h4>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Input
               label="Bar Council Enrollment No."
               placeholder="e.g. TN/1420/2020"
@@ -162,7 +162,7 @@ export const AddEditJuniorModal = ({ isOpen, onClose, juniorToEdit }) => {
         </div>
 
         {/* Section 3: Chamber & Residence Address */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
             <MapPin className="w-4 h-4 text-emerald-600" />
             <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -179,13 +179,13 @@ export const AddEditJuniorModal = ({ isOpen, onClose, juniorToEdit }) => {
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               placeholder="Enter residential or chamber street address..."
-              className="w-full rounded-lg border border-slate-300 focus:ring-navy-600 focus:border-navy-600 px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 bg-white focus:outline-none focus:ring-1 transition-colors"
+              className="w-full rounded-xl border border-slate-300 focus:ring-navy-600 focus:border-navy-600 p-3.5 sm:p-4 text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-white focus:outline-none focus:ring-1 transition-colors"
             />
           </div>
         </div>
 
         {/* Sticky Action Footer */}
-        <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3 sticky bottom-0 bg-white py-3">
+        <div className="pt-4 border-t border-slate-200 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sticky bottom-0 bg-white py-3">
           <Button variant="outline" size="md" onClick={onClose}>
             Cancel
           </Button>

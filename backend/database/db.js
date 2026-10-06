@@ -59,6 +59,18 @@ export const writeDB = (data) => {
   }
 };
 
+export const deduplicateList = (list) => {
+  if (!Array.isArray(list)) return [];
+  const seen = new Set();
+  return list.filter((item) => {
+    if (!item) return false;
+    const key = item.id || item._id?.toString() || JSON.stringify(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
 /**
  * Sync MongoDB to Local Cache on Startup
  */
@@ -75,11 +87,11 @@ export const syncFromMongo = async () => {
     ]);
 
     const db = readDB();
-    if (users.length) db.users = users;
-    if (juniors.length) db.juniors = juniors;
-    if (cases.length) db.cases = cases;
-    if (amounts.length) db.amounts = amounts;
-    if (hearings.length) db.hearings = hearings;
+    if (users.length) db.users = deduplicateList(users);
+    if (juniors.length) db.juniors = deduplicateList(juniors);
+    if (cases.length) db.cases = deduplicateList(cases);
+    if (amounts.length) db.amounts = deduplicateList(amounts);
+    if (hearings.length) db.hearings = deduplicateList(hearings);
     
     if (settings.length) {
       db.settings = settings.reduce((acc, s) => {
@@ -89,7 +101,7 @@ export const syncFromMongo = async () => {
     }
 
     writeDB(db);
-    console.log('🔄 Synced all data from MongoDB Atlas into active runtime database');
+    console.log('🔄 Synced and deduplicated all data from MongoDB Atlas into active runtime database');
   } catch (err) {
     console.error('Error syncing from MongoDB:', err.message);
   }
@@ -100,12 +112,14 @@ export const syncFromMongo = async () => {
  */
 export const getCollection = (name) => {
   const db = readDB();
-  return db[name] || [];
+  const items = db[name] || [];
+  return Array.isArray(items) ? deduplicateList(items) : items;
 };
 
 export const setCollection = (name, items) => {
+  const cleanItems = Array.isArray(items) ? deduplicateList(items) : items;
   const db = readDB();
-  db[name] = items;
+  db[name] = cleanItems;
   writeDB(db);
 
   // Sync to MongoDB

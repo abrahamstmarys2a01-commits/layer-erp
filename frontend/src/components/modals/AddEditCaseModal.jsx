@@ -276,8 +276,8 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
     >
       <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-6 pb-6">
         {/* Section 1: Client Information */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4 text-blue-600" />
               <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -285,13 +285,13 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
               </h4>
             </div>
             {existingClientInfo && (
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1 self-start sm:self-auto">
                 <CheckCircle2 className="w-3 h-3" /> Existing Chamber Client ({existingClientInfo.caseCount} Cases)
               </span>
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Input
               label="Client Full Name"
               required
@@ -340,7 +340,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
                 <button
                   type="button"
                   onClick={handleAutofillClient}
-                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-[11px] shadow-xs cursor-pointer whitespace-nowrap transition-colors"
+                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-[11px] shadow-xs cursor-pointer whitespace-nowrap transition-colors touch-target"
                 >
                   ⚡ Autofill Contact Info
                 </button>
@@ -350,7 +350,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
         </div>
 
         {/* Section 2: Court, Case Type & Bench Assignment */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
             <Landmark className="w-4 h-4 text-indigo-600" />
             <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -358,7 +358,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
             </h4>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Select
               label="Court / Forum"
               required
@@ -384,7 +384,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2">
             <Select
               label="Assigned Junior Advocate"
               required
@@ -411,7 +411,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
         </div>
 
         {/* Section 3: Financials & Opposing Party */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
             <IndianRupee className="w-4 h-4 text-emerald-600" />
             <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -419,7 +419,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
             </h4>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <Input
               label="Total Agreed Fee (₹)"
               type="number"
@@ -455,7 +455,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
         </div>
 
         {/* Section 4: Statement of Facts & Summary */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
             <FileText className="w-4 h-4 text-blue-600" />
             <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -469,21 +469,21 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Enter brief facts, prayer sought, urgent injunction notes, or client instructions..."
-              className="w-full rounded-xl border border-slate-300 focus:ring-navy-600 focus:border-navy-600 p-4 text-sm text-slate-800 placeholder-slate-400 bg-white focus:outline-none focus:ring-1 leading-relaxed"
+              className="w-full rounded-xl border border-slate-300 focus:ring-navy-600 focus:border-navy-600 p-3.5 sm:p-4 text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-white focus:outline-none focus:ring-1 leading-relaxed"
             />
           </div>
         </div>
 
         {/* Section 5: Case-Related Documents Upload */}
-        <div className="bg-slate-50/70 p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+        <div className="bg-slate-50/70 p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <Paperclip className="w-4 h-4 text-emerald-600" />
               <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">
                 5. Case-Related Documents (FIR, Agreement, Aadhaar, Court Order)
               </h4>
             </div>
-            <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-navy-100 text-navy-900">
+            <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-navy-100 text-navy-900 self-start sm:self-auto">
               {documents.length} {documents.length === 1 ? 'Document' : 'Documents'} Attached
             </span>
           </div>
@@ -493,7 +493,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
             <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
               Quick One-Click Legal Templates (Click to Attach / Toggle)
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
               {standardDocPresets.map((preset) => {
                 const isAttached = documents.some((d) => d.title.toLowerCase() === preset.title.toLowerCase());
                 return (
@@ -501,7 +501,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
                     key={preset.title}
                     type="button"
                     onClick={() => handleToggleDocPreset(preset)}
-                    className={`flex items-center justify-between p-3 rounded-xl border text-left transition-all ${
+                    className={`flex items-center justify-between p-3 rounded-xl border text-left transition-all touch-target ${
                       isAttached
                         ? 'bg-navy-900 text-white border-navy-900 shadow-sm ring-1 ring-navy-900'
                         : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
@@ -584,7 +584,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
                     <button
                       type="button"
                       onClick={() => handleRemoveDoc(doc.id)}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors ml-2"
+                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors ml-2 touch-target"
                       title="Remove document"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -597,7 +597,7 @@ export const AddEditCaseModal = ({ isOpen, onClose, caseToEdit }) => {
         </div>
 
         {/* Sticky Action Footer */}
-        <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3 sticky bottom-0 bg-white py-3">
+        <div className="pt-4 border-t border-slate-200 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sticky bottom-0 bg-white py-3">
           <Button variant="outline" size="md" onClick={onClose}>
             Cancel
           </Button>

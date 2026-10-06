@@ -31,6 +31,7 @@
   ],
   "cases": [
     {
+      "_id": "6ac4939d469bb686ec96770d",
       "id": "CASE-1003",
       "clientName": "Test Client Ramesh",
       "clientMobile": "9876543210",
@@ -42,60 +43,21 @@
       "caseStatus": "Active",
       "amountStatus": "Partial",
       "totalFee": 60000,
-      "paidAmount": 35000,
+      "paidAmount": 20000,
       "nextHearingDate": "-",
       "description": "",
       "filingDate": "2026-10-06",
       "opposingParty": "",
       "opposingAdvocate": "",
       "documents": [],
-      "notes": []
-    },
-    {
-      "id": "CASE-1002",
-      "clientName": "balajii",
-      "clientMobile": "8489645483",
-      "clientEmail": "balajii@gmail.com",
-      "caseNumber": "",
-      "caseType": "Family",
-      "court": "District Court",
-      "assignedJunior": "thulasi",
-      "caseStatus": "Active",
-      "amountStatus": "Partial",
-      "totalFee": 50000,
-      "paidAmount": 20000,
-      "nextHearingDate": "2026-10-09",
-      "description": "",
-      "filingDate": "2026-10-06",
-      "opposingParty": "",
-      "opposingAdvocate": "",
-      "documents": [],
-      "notes": []
-    },
-    {
-      "id": "CASE-1001",
-      "clientName": "Edwin",
-      "clientMobile": "9786136875",
-      "clientEmail": "edwin@gmail.com",
-      "caseNumber": "CSE-001-2026",
-      "caseType": "Criminal",
-      "court": "District Court",
-      "assignedJunior": "Vimal",
-      "caseStatus": "Active",
-      "amountStatus": "Paid",
-      "totalFee": 50000,
-      "paidAmount": 500000,
-      "nextHearingDate": "2026-10-26",
-      "description": "",
-      "filingDate": "2026-10-05",
-      "opposingParty": "",
-      "opposingAdvocate": "",
-      "documents": [],
-      "notes": []
+      "notes": [],
+      "createdAt": "2026-10-06T06:22:21.893Z",
+      "updatedAt": "2026-10-06T06:22:21.893Z"
     }
   ],
   "amounts": [
     {
+      "_id": "6ac493d3469bb686ec96770e",
       "id": "TXN-1003",
       "caseId": "CASE-1003",
       "clientName": "Test Client Ramesh",
@@ -104,29 +66,9 @@
       "paymentMode": "UPI",
       "description": "Advance Fee Payment",
       "addedBy": "Admin",
-      "receiptNo": "REC-2026-713"
-    },
-    {
-      "id": "TXN-1002",
-      "caseId": "CASE-1002",
-      "clientName": "balajii",
-      "amount": 20000,
-      "paymentDate": "2026-10-06",
-      "paymentMode": "Cash",
-      "description": "",
-      "addedBy": "Admin",
-      "receiptNo": "REC-2026-592"
-    },
-    {
-      "id": "TXN-1001",
-      "caseId": "CASE-1001",
-      "clientName": "Edwin",
-      "amount": 500000,
-      "paymentDate": "2026-10-05",
-      "paymentMode": "Cash",
-      "description": "",
-      "addedBy": "Admin",
-      "receiptNo": "REC-2026-195"
+      "receiptNo": "REC-2026-713",
+      "createdAt": "2026-10-06T06:23:15.213Z",
+      "updatedAt": "2026-10-06T06:23:15.213Z"
     }
   ],
   "hearings": [

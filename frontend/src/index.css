@@ -25,11 +25,17 @@
   --shadow-dropdown: 0 10px 25px -5px rgba(11, 25, 44, 0.12), 0 8px 10px -6px rgba(11, 25, 44, 0.08);
 }
 
+/* Base Body & Root Settings to prevent horizontal page overflow */
+html,
 body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: #F7F8FA;
   color: #1e293b;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
 }
 
 /* Custom Scrollbar for sleek corporate UI */
@@ -51,7 +57,29 @@ body {
   background: #94a3b8;
 }
 
+/* Hide scrollbar for clean horizontal tab bars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Responsive Table Container */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Card Transitions */
 .card-transition {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Touch friendly minimum tap target */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
 }

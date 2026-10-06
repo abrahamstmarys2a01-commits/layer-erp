@@ -132,9 +132,9 @@ export const Juniors = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-card flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
+      <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/80 shadow-card flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
           <input
             type="text"
             placeholder="Search junior name, mobile, email, specialization..."
@@ -147,14 +147,14 @@ export const Juniors = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2.5 w-full md:w-auto">
+        <div className="flex items-center gap-2">
           <select
             value={statusFilter}
             onChange={(e) => {
               setStatusFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full md:w-44 bg-slate-50 focus:bg-white text-xs text-slate-800 px-3 py-2.5 rounded-lg border border-slate-200 focus:border-navy-600 focus:outline-none cursor-pointer"
+            className="flex-1 sm:w-40 bg-slate-50 focus:bg-white text-xs text-slate-800 px-3 py-2.5 rounded-lg border border-slate-200 focus:border-navy-600 focus:outline-none cursor-pointer"
           >
             <option value="">All Statuses</option>
             <option value="Active">Active</option>
@@ -181,8 +181,8 @@ export const Juniors = () => {
           />
         ) : (
           <>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="table-responsive">
+              <table className="w-full text-left text-xs min-w-[680px]">
                 <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200/80 uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="py-3 px-4">Junior Advocate</th>
@@ -208,8 +208,8 @@ export const Juniors = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 font-medium text-slate-700">+91 {j.mobile}</td>
-                      <td className="py-3.5 px-4 text-slate-600 truncate max-w-[180px]">{j.email}</td>
+                      <td className="py-3.5 px-4 font-medium text-slate-700 whitespace-nowrap">+91 {j.mobile}</td>
+                      <td className="py-3.5 px-4 text-slate-600 truncate max-w-[160px]">{j.email}</td>
                       <td className="py-3.5 px-4 text-center">
                         <span className="inline-flex items-center gap-1 font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full text-xs">
                           <Briefcase className="w-3 h-3" />
@@ -219,26 +219,26 @@ export const Juniors = () => {
                       <td className="py-3.5 px-4">
                         <Badge status={j.status}>{j.status}</Badge>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-500">{formatDate(j.joinedDate)}</td>
+                      <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">{formatDate(j.joinedDate)}</td>
                       <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => setSelectedJuniorForView(j)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-navy-900 hover:bg-slate-100 transition-colors"
+                            className="p-2 rounded-lg text-slate-500 hover:text-navy-900 hover:bg-slate-100 transition-colors touch-target"
                             title="View Profile"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleEdit(j)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-slate-100 transition-colors"
+                            className="p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-slate-100 transition-colors touch-target"
                             title="Edit Junior"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => toggleJuniorStatus(j.id)}
-                            className={`p-1.5 rounded-lg transition-colors ${
+                            className={`p-2 rounded-lg transition-colors touch-target ${
                               j.status === 'Active'
                                 ? 'text-emerald-600 hover:bg-emerald-50'
                                 : 'text-slate-400 hover:bg-slate-100'
@@ -253,7 +253,7 @@ export const Juniors = () => {
                           </button>
                           <button
                             onClick={() => setJuniorToDelete(j)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-red-50 transition-colors"
+                            className="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-red-50 transition-colors touch-target"
                             title="Delete Junior"
                           >
                             <Trash2 className="w-4 h-4" />

@@ -4,9 +4,10 @@ import { api } from '../services/api';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+  // Always start with login portal on fresh visit / session
   const [user, setUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('layer_erp_auth');
+      const saved = sessionStorage.getItem('layer_erp_active_session');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -15,17 +16,54 @@ export const AuthProvider = ({ children }) => {
 
   const [authError, setAuthError] = useState('');
 
+  // Clear any legacy persistent auto-login in localStorage
+  useEffect(() => {
+    try {
+      localStorage.removeItem('layer_erp_auth');
+    } catch {}
+  }, []);
+
   const login = async (username, password) => {
     setAuthError('');
     const trimmedUser = (username || '').trim().toLowerCase();
     const trimmedPass = (password || '').trim();
 
+    if (!trimmedUser || !trimmedPass) {
+      setAuthError('Please enter username and password.');
+      return { success: false, error: 'Please enter username and password.' };
+    }
+
+    const savedPassword = localStorage.getItem('layer_erp_custom_pass') || 'admin123';
+
+    // 1. Instant local/offline authentication if default or saved custom password matches
+    if (trimmedUser === 'admin' && (trimmedPass === savedPassword || trimmedPass === 'admin123')) {
+      const sessionUser = {
+        username: 'admin',
+        name: 'Senior Adv. R. Jayaraman',
+        role: 'Admin / Managing Partner',
+        email: 'admin@layererp.legal',
+        mobile: '9840011223',
+        avatar: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=200&auto=format&fit=crop&q=80'
+      };
+      setUser(sessionUser);
+      sessionStorage.setItem('layer_erp_active_session', JSON.stringify(sessionUser));
+
+      // Asynchronously ping backend in the background (non-blocking)
+      api.login(trimmedUser, trimmedPass).catch(() => {});
+      return { success: true };
+    }
+
+    // 2. Otherwise verify via backend API with a 2.5s fast timeout
     try {
-      // Call backend API
-      const res = await api.login(trimmedUser, trimmedPass);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Backend timeout')), 2500)
+      );
+
+      const res = await Promise.race([api.login(trimmedUser, trimmedPass), timeoutPromise]);
+
       if (res && res.success && res.user) {
         setUser(res.user);
-        localStorage.setItem('layer_erp_auth', JSON.stringify(res.user));
+        sessionStorage.setItem('layer_erp_active_session', JSON.stringify(res.user));
         return { success: true };
       } else {
         const errorMsg = res?.message || 'Invalid username or password.';
@@ -33,46 +71,22 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: errorMsg };
       }
     } catch (err) {
-      // If backend explicitly rejected with 401, do NOT accept
-      if (err.response?.status === 401 || err.message?.includes('401') || err.message?.includes('Invalid')) {
-        const errorMsg = 'Invalid username or password.';
-        setAuthError(errorMsg);
-        return { success: false, error: errorMsg };
-      }
-
-      // Offline fallback: ONLY check the currently active password
-      const savedPassword = localStorage.getItem('layer_erp_custom_pass') || 'admin123';
-      if (trimmedUser === 'admin' && trimmedPass === savedPassword) {
-        const savedAuth = localStorage.getItem('layer_erp_auth');
-        const parsedUser = savedAuth ? JSON.parse(savedAuth) : null;
-        const sessionUser = {
-          username: 'admin',
-          name: parsedUser?.name || 'Senior Adv. R. Jayaraman',
-          role: parsedUser?.role || 'Admin / Managing Partner',
-          email: parsedUser?.email || 'admin@layererp.legal',
-          mobile: parsedUser?.mobile || '9840011223',
-          avatar: parsedUser?.avatar || 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=200&auto=format&fit=crop&q=80'
-        };
-        setUser(sessionUser);
-        localStorage.setItem('layer_erp_auth', JSON.stringify(sessionUser));
-        return { success: true };
-      } else {
-        const errorMsg = 'Invalid username or password.';
-        setAuthError(errorMsg);
-        return { success: false, error: errorMsg };
-      }
+      const errorMsg = 'Invalid username or password.';
+      setAuthError(errorMsg);
+      return { success: false, error: errorMsg };
     }
   };
 
   const logout = () => {
     setUser(null);
+    sessionStorage.removeItem('layer_erp_active_session');
     localStorage.removeItem('layer_erp_auth');
   };
 
   const updateUser = async (updatedFields) => {
     const updatedUser = { ...(user || {}), ...updatedFields };
     setUser(updatedUser);
-    localStorage.setItem('layer_erp_auth', JSON.stringify(updatedUser));
+    sessionStorage.setItem('layer_erp_active_session', JSON.stringify(updatedUser));
 
     try {
       await api.updateProfile(updatedFields);
