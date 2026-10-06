@@ -7,17 +7,100 @@ import { initialSettings } from '../data/mockSettings';
 import { generateId } from '../utils/formatters';
 import { api } from '../services/api';
 
+// Persistent Deletion Set to ensure deleted records stay deleted across reloads
+const getDeletedIds = () => {
+  try {
+    const raw = localStorage.getItem('layer_erp_deleted_ids');
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch {
+    return new Set();
+  }
+};
+
+const markAsDeleted = (id) => {
+  if (!id) return;
+  try {
+    const ids = getDeletedIds();
+    ids.add(String(id));
+    localStorage.setItem('layer_erp_deleted_ids', JSON.stringify(Array.from(ids)));
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+const unmarkDeleted = (id) => {
+  if (!id) return;
+  try {
+    const ids = getDeletedIds();
+    if (ids.has(String(id))) {
+      ids.delete(String(id));
+      localStorage.setItem('layer_erp_deleted_ids', JSON.stringify(Array.from(ids)));
+    }
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 // Helper to deduplicate records by ID / unique identifier
 export const deduplicateList = (list) => {
   if (!Array.isArray(list)) return [];
   const seen = new Set();
+  const deletedIds = getDeletedIds();
   return list.filter((item) => {
     if (!item) return false;
-    const key = item.id || item._id || JSON.stringify(item);
+    const key = String(item.id || item._id || JSON.stringify(item));
+    if (deletedIds.has(key)) return false;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+};
+
+// Intelligently merge remote backend data with local storage so user additions/updates are never wiped
+export const mergeCollections = (localItems = [], remoteItems = []) => {
+  const deletedIds = getDeletedIds();
+  const map = new Map();
+
+  // 1. Load remote backend records
+  (remoteItems || []).forEach((item) => {
+    if (!item) return;
+    const key = String(item.id || item._id);
+    if (key && !deletedIds.has(key)) {
+      map.set(key, { ...item });
+    }
+  });
+
+  // 2. Merge local records, preserving user edits and user-added items
+  (localItems || []).forEach((item) => {
+    if (!item) return;
+    const key = String(item.id || item._id);
+    if (key && !deletedIds.has(key)) {
+      if (map.has(key)) {
+        const remoteItem = map.get(key);
+        // Merge notes & documents without duplicates
+        const mergedNotes = deduplicateList([
+          ...(item.notes || []),
+          ...(remoteItem.notes || [])
+        ]);
+        const mergedDocs = deduplicateList([
+          ...(item.documents || []),
+          ...(remoteItem.documents || [])
+        ]);
+
+        map.set(key, {
+          ...remoteItem,
+          ...item,
+          notes: mergedNotes.length > 0 ? mergedNotes : (item.notes || remoteItem.notes || []),
+          documents: mergedDocs.length > 0 ? mergedDocs : (item.documents || remoteItem.documents || [])
+        });
+      } else {
+        // User created item locally
+        map.set(key, { ...item });
+      }
+    }
+  });
+
+  return deduplicateList(Array.from(map.values()));
 };
 
 const ERPContext = createContext(null);
@@ -72,7 +155,7 @@ export const ERPProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
   const [isBackendConnected, setIsBackendConnected] = useState(false);
 
-  // Sync data from backend API on initial mount with automatic deduplication
+  // Sync data from backend API on initial mount with non-destructive merge
   useEffect(() => {
     const fetchBackendData = async () => {
       try {
@@ -85,20 +168,20 @@ export const ERPProvider = ({ children }) => {
         ]);
 
         if (jRes.status === 'fulfilled' && jRes.value?.data && Array.isArray(jRes.value.data)) {
-          setJuniors(deduplicateList(jRes.value.data));
+          setJuniors((prev) => mergeCollections(prev, jRes.value.data));
           setIsBackendConnected(true);
         }
         if (cRes.status === 'fulfilled' && cRes.value?.data && Array.isArray(cRes.value.data)) {
-          setCases(deduplicateList(cRes.value.data));
+          setCases((prev) => mergeCollections(prev, cRes.value.data));
         }
         if (aRes.status === 'fulfilled' && aRes.value?.data && Array.isArray(aRes.value.data)) {
-          setAmounts(deduplicateList(aRes.value.data));
+          setAmounts((prev) => mergeCollections(prev, aRes.value.data));
         }
         if (hRes.status === 'fulfilled' && hRes.value?.data && Array.isArray(hRes.value.data)) {
-          setHearings(deduplicateList(hRes.value.data));
+          setHearings((prev) => mergeCollections(prev, hRes.value.data));
         }
         if (sRes.status === 'fulfilled' && sRes.value?.data) {
-          setSettings(sRes.value.data);
+          setSettings((prev) => ({ ...sRes.value.data, ...prev }));
         }
       } catch (err) {
         console.warn('Connected in standalone mode:', err.message);
@@ -145,6 +228,7 @@ export const ERPProvider = ({ children }) => {
   // --- JUNIOR ACTIONS ---
   const addJunior = async (juniorData) => {
     const newId = generateId('JUN', juniors);
+    unmarkDeleted(newId);
     const newJunior = {
       ...juniorData,
       id: newId,
@@ -182,6 +266,7 @@ export const ERPProvider = ({ children }) => {
   };
 
   const deleteJunior = async (id) => {
+    markAsDeleted(id);
     setJuniors((prev) => prev.filter((j) => j.id !== id));
     showToast('Junior deleted successfully.');
 
@@ -214,6 +299,7 @@ export const ERPProvider = ({ children }) => {
   // --- CASE ACTIONS ---
   const addCase = async (caseData) => {
     const newId = caseData.id || generateId('CASE', cases);
+    unmarkDeleted(newId);
     const totalFee = Number(caseData.totalFee || 50000);
     const paidAmount = Number(caseData.paidAmount || 0);
     const amountStatus =
@@ -256,6 +342,7 @@ export const ERPProvider = ({ children }) => {
     // If next hearing date is provided, create initial hearing entry
     if (caseData.nextHearingDate && caseData.nextHearingDate !== '-') {
       const newHearingId = generateId('HRG', hearings);
+      unmarkDeleted(newHearingId);
       const newHearing = {
         id: newHearingId,
         caseId: newId,
@@ -298,6 +385,7 @@ export const ERPProvider = ({ children }) => {
   };
 
   const deleteCase = async (id) => {
+    markAsDeleted(id);
     setCases((prev) => prev.filter((c) => c.id !== id));
     showToast('Case deleted successfully.');
 
@@ -403,6 +491,7 @@ export const ERPProvider = ({ children }) => {
   // --- AMOUNT ACTIONS ---
   const addAmount = async (amountData) => {
     const newId = generateId('TXN', amounts);
+    unmarkDeleted(newId);
     const amountVal = Number(amountData.amount || 0);
 
     const newAmount = {
@@ -465,6 +554,7 @@ export const ERPProvider = ({ children }) => {
   };
 
   const deleteAmount = async (id) => {
+    markAsDeleted(id);
     setAmounts((prev) => prev.filter((a) => a.id !== id));
     showToast('Amount entry deleted successfully.');
 
@@ -478,6 +568,7 @@ export const ERPProvider = ({ children }) => {
   // --- HEARING ACTIONS ---
   const addHearing = async (hearingData) => {
     const newId = generateId('HRG', hearings);
+    unmarkDeleted(newId);
     const newHearing = {
       ...hearingData,
       id: newId,
@@ -528,6 +619,7 @@ export const ERPProvider = ({ children }) => {
   };
 
   const deleteHearing = async (id) => {
+    markAsDeleted(id);
     setHearings((prev) => prev.filter((h) => h.id !== id));
     showToast('Hearing deleted successfully.');
 
@@ -560,6 +652,7 @@ export const ERPProvider = ({ children }) => {
     localStorage.removeItem('layer_erp_amounts');
     localStorage.removeItem('layer_erp_hearings');
     localStorage.removeItem('layer_erp_settings');
+    localStorage.removeItem('layer_erp_deleted_ids');
     showToast('Reset to original legal practice records.');
 
     try {
